@@ -4,24 +4,42 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      List
+      Upload text
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let item of items">
-      <ion-icon [name]="item.icon" slot="start"></ion-icon>
-      {{item.title}}
-      <div class="item-note" slot="end">
-        {{item.note}}
-      </div>
+  <form [formGroup]="uploadForm">
+    <ion-item>
+        <ion-label position="floating">Title</ion-label>
+        <ion-input type="text" formControlName="title"></ion-input>
+        <ion-label *ngIf="uploaded && f.title.errors" class="invalid-feedback">
+            <div *ngIf="f.title.errors.required">Title is required</div>
+        </ion-label>
     </ion-item>
-  </ion-list>
-  <!--
-    <div *ngIf="selectedItem" padding>
-      You navigated here from <b>{{selectedItem.title }}</b>
-    </div>
-  -->
+    <ion-item>
+        <ion-label position="floating">Message</ion-label>
+        <ion-textarea formControlName="message"></ion-textarea>
+        <ion-label  *ngIf="uploaded && f.message.errors" class="invalid-feedback">
+            <div *ngIf="f.message.errors.required">Message is required</div>
+        </ion-label>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">Keywords (seperate by comma)</ion-label>
+        <ion-input type="text" formControlName="keywords"></ion-input>
+       
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">Metadata (in JSON format)</ion-label>
+        <ion-textarea formControlName="metadata"  [ngClass]="{ 'is-invalid': uploaded && f.message.errors }"></ion-textarea>
+      
+    </ion-item>
+    <ion-item *ngIf="uploaded">
+        <ion-label>Result</ion-label>
+        <ion-textarea formControlName="uploadResult"></ion-textarea>
+    </ion-item>
+    <ion-button [disabled]="loading" size="small" (click)="onUpload()">Upload</ion-button>
+   
+  </form>
 </ion-content>
